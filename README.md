@@ -1,16 +1,21 @@
-# React + Vite
+# Vending Machine Inventory Tracking System
+This project is a frontend prototype for a vending machine inventory tracking system. 
+It helps users monitor machine stock levels, inspect the products inside each machine, view product availability across machines, and submit feedback about issues.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features
+- Dashboard with machine stock overview
+- Machines page with product-level inventory details
+- Products page showing selected product availability across machines
+- Feedback form for reporting issues
 
-Currently, two official plugins are available:
+## Built With
+- React
+- Vite
+- JavaScript
+- Inline CSS styling
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Structure
+- `src/pages` - main application pages
+- `src/components` - reusable UI components
+- `src/data` - mock data used in the app
+- `src/utils` - shared helper functions

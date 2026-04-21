@@ -19,3 +19,9 @@ It helps users monitor machine stock levels, inspect the products inside each ma
 - `src/components` - reusable UI components
 - `src/data` - mock data used in the app
 - `src/utils` - shared helper functions
+
+### Frontend
+- **React** – used to build the user interface with reusable components
+- **React DOM** – renders React components in the browser
+- **Material UI (MUI)** – used mainly for icons and UI elements
+- **Emotion** – styling engine used by MUI

@@ -127,6 +127,7 @@ const pageLayout = {
   display: "flex",
   justifyContent: "center",
   alignItems: "flex-start",
+  marginLeft: "230px",
 };
 
 const pageContent = {

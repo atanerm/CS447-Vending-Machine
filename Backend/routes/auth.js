@@ -27,7 +27,7 @@ router.post("/register", async (req, res) =>{ //create  a new User
         return res.status(400).json({message: "Please fill in all required fields"});
     }
 
-    const userExists = await pool.query("SELECT ROLE_ID FROM USERS WHERE EMAIL = $1", [email]); //get users with that email
+    const userExists = await pool.query("SELECT role_id FROM USERS WHERE EMAIL = $1", [email]); //get users with that email
 
     if (userExists.rows.length > 0){ //if user already exists
         return res.status(400).json({message: 'User already exists'}) //email is not unique (invalid)

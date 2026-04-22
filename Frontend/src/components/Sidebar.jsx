@@ -30,6 +30,8 @@ export default function Sidebar({ activePage, onNavigate }) {
         display: "flex",
         flexDirection: "column",
         padding: "0 0 24px",
+        position: 'fixed',
+        overflow: 'auto',
       }}
     >
       {/* Logo and app title */}

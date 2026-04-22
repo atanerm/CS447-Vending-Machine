@@ -82,7 +82,7 @@ export default function Machines({
   }, [currentMachine]);
 
   return (
-    <div style={{ padding: "32px 36px", flex: 1, overflowY: "auto" }}>
+    <div style={{ padding: "32px 36px", flex: 1, overflowY: "auto", marginLeft: "230px"}}>
 
       {/* Navigation buttons */}
       <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>

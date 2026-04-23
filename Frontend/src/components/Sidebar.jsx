@@ -8,18 +8,21 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import StorageIcon from "@mui/icons-material/Storage";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import FeedbackIcon from "@mui/icons-material/Feedback";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Each entry maps a page id to its label and icon component
-const NAV_ITEMS = [
-  { id: "dashboard", label: "Dashboard", icon: DashboardIcon },
-  { id: "machines", label: "Machines", icon: StorageIcon },
-  { id: "products", label: "Products", icon: InventoryIcon },
-  { id: "feedback", label: "Feedback", icon: FeedbackIcon },
-];
-
 // activePage: id of the currently active page, used to highlight the right nav item
 // onNavigate: callback returened with the item id when the user clicks a nav button
-export default function Sidebar({ activePage, onNavigate }) {
+export default function Sidebar() {
+  const NAV_ITEMS = [
+  { path: "/dashboard", label: "Dashboard", icon: DashboardIcon },
+  { path: "/machines", label: "Machines", icon: StorageIcon },
+  { path: "/products", label: "Products", icon: InventoryIcon },
+  { path: "/feedback", label: "Feedback", icon: FeedbackIcon },
+  ];
+  const navigate = useNavigate();
+  const location = useLocation();
+ 
   return (
     <aside
       style={{
@@ -72,15 +75,15 @@ export default function Sidebar({ activePage, onNavigate }) {
       <nav style={{ padding: "20px 10px", flex: 1 }}>
         {NAV_ITEMS.map((item) => {
           // Determines whether this button should render in its active state
-          const isActive = activePage === item.id;
+          const isActive = location.pathname === item.path;
 
           // MUI icon components must be stored in a capitalized variable to be used as JSX
           const Icon = item.icon;
 
           return (
             <button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
+              key={item.path}
+              onClick={() => navigate(item.path)}
               style={{
                 width: "95%",
                 display: "flex",
@@ -100,18 +103,6 @@ export default function Sidebar({ activePage, onNavigate }) {
                 textAlign: "left",
                 transition: "all 0.15s",
               }}
-              // Note: these handlers set color to the same value on both enter and leave,
-              // so they have no visible effect see 
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.color = "#1e293b";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.color = "#1e293b";
-                }
-              }}
             >
               {/* Icon fades slightly when inactive */}
               <Icon style={{ fontSize: 18, opacity: isActive ? 1 : 0.7 }} />
@@ -119,7 +110,7 @@ export default function Sidebar({ activePage, onNavigate }) {
               <span>{item.label}</span>
 
               {/* Count badge only shown on the Machines nav item */}
-              {item.id === "machines" && (
+              {item.path === "machines" && (
                 <span
                   style={{
                     marginLeft: "auto",

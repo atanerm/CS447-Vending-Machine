@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import pool from '../config/db.js';
 import dotenv from 'dotenv';
-
+import { protect_login } from '../middleware/auth.js';
 const router = express.Router();
 
 const cookieOptions = {
@@ -49,14 +49,14 @@ router.post("/register", async (req, res) =>{ //create  a new User
     //hash the password bcyrpt hash + salt 2^12
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const newUser = await pool.query(
+    const newUser = await pool.query( // add new user to database
         "INSERT INTO Users (first_name, last_name, email, password, role_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
         [firstName, lastName, email, hashedPassword, roleID] //create new user
     );
 
     const token = generateToken(newUser.rows[0].user_id);
 
-    res.cookie('token', token, cookieOptions);
+    res.cookie('token', token, cookieOpctions);
 
     return res.status(201).json({user: newUser.rows[0]}); //return user id, name and email
 }); 
@@ -109,6 +109,9 @@ router.post("/login", async(req, res) => {
     });
 });
 
+router.get('/me', protect_login, async(req, res) => {
+    res.json({ user: req.user });
+});
 
 //logout
 router.post('/logout', (req, res) => {

@@ -7,6 +7,8 @@ It helps users monitor machine stock levels, inspect the products inside each ma
 - Machines page with product-level inventory details
 - Products page showing selected product availability across machines
 - Feedback form for reporting issues
+- Login and Register pages for authentication
+- 404 error page for non-existent url paths
 
 ## Built With
 - React
@@ -25,3 +27,4 @@ It helps users monitor machine stock levels, inspect the products inside each ma
 - **React DOM** – renders React components in the browser
 - **Material UI (MUI)** – used mainly for icons and UI elements
 - **Emotion** – styling engine used by MUI
+- **Postgres** - database was created with postgres

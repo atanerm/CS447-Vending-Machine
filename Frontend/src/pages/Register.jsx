@@ -13,6 +13,7 @@ const Register = ({ setUser }) =>{
     const navigate = useNavigate();
     const handleSubmit = async(e) =>{
         e.preventDefault();
+        setError("");
         try{
             const res = await axios.post("http://localhost:5000/api/auth/register", form);
             navigate("/login");
@@ -25,6 +26,7 @@ const Register = ({ setUser }) =>{
         <div>
             <form onSubmit={handleSubmit}>
                 <h2>Sign Up</h2>
+                {error && <p>{error}</p>}
                 <input
                     type = "text"
                     placeholder = "First Name"

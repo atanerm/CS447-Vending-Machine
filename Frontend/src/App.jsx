@@ -72,7 +72,7 @@ export default function App() {
     <>
        {/* Main app layout: sidebar on the left, page content on the right */}
       <div style={{ display: "flex", height: "100vh", overflow: "hidden"}}>
-        {handleSidebar()? <Sidebar/>:null} {/* if login do not render sidebar */}
+        {handleSidebar()? <Sidebar setUser={setUser}/>:null} {/* if login do not render sidebar */}
         <main
           style={{
             display: "flex",
@@ -95,7 +95,7 @@ export default function App() {
               goHome={goHome}
             />}/>
           <Route path = "/products" element={<Products goBack={goBack} goHome={goHome} />}/>
-          <Route path = "/feedback" element={<Feedback  goBack={goBack} goHome={goHome}/>} />
+          <Route path = "/feedback" element={<Feedback  goBack={goBack} goHome={goHome} user={user}/>} />
           <Route path = "/login" element={user? <Navigate to="/dashboard"/>:<Login setUser={setUser}/>}/>
           <Route path = "/register" element={user? <Navigate to="/dashboard"/>:<Register setUser={setUser}/>}/>
           <Route path = "*" element={<NotFound/>}/>

@@ -1,37 +1,45 @@
 import { useState } from "react";
 import { MACHINES } from "../data/genData";
+import axios from "axios";
 
-export default function Feedback({ goBack, goHome }) {
+export default function Feedback({ goBack, goHome, user }) {
   // Stores the form input values
-  const [machineId, setMachineId] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
+  const [form, setForm] = useState({
+      user: user ? user.user_id:null,
+      machine: "",
+      subject: "",
+      message: ""
+  })
+  
+  const [error, setError] = useState("");
 
   // Controls the success message after submission
   const [submitted, setSubmitted] = useState(false);
 
   // Handles form submission and simple validation
-  function handleSubmit(e) {
+  const handleSubmit = async(e) =>{
     e.preventDefault();
+    setSubmitted(false);
+    try{
+      const res = await axios.post("http://localhost:5000/api/auth/feedback", form);
+      // Temporary placeholder for future backend/database submission
+      console.log(
+        form.machine,
+        form.subject,
+        form.message,
+      );
 
-    // Require all fields before allowing submission
-    if (!machineId || !subject || !message) {
-      alert("Please fill out all fields.");
-      return;
+      setForm({
+        machine: "",
+        subject: "",
+        message: ""
+      });
+      setSubmitted(true);
+      setError("");
+    } 
+    catch(err){
+      setError(err.response?.data?.message || "Submit feedback failed");
     }
-
-    // Temporary placeholder for future backend/database submission
-    console.log({
-      machineId,
-      subject,
-      message,
-    });
-
-    // Reset form after successful submission
-    setMachineId("");
-    setSubject("");
-    setMessage("");
-    setSubmitted(true);
   }
 
   return (
@@ -56,21 +64,23 @@ export default function Feedback({ goBack, goHome }) {
               Let us know about any issues with vending machines.
             </p>
           </div>
-
-          {/* Success message after submission */}
-          {submitted && (
-            <div style={successMessage}>
-              Feedback submitted successfully!
-            </div>
-          )}
+          
 
           {/* Feedback form */}
           <form onSubmit={handleSubmit} style={formStyle}>
             <div>
+              {/* Unsucessful submission */}
+              {error && <p style={failMessage}>{error}</p>}
+              {/* Success message after submission */}
+              {submitted && (
+                <p style={successMessage}>
+                  Feedback submitted successfully!
+                </p>
+              )}
               <label style={labelStyle}>Machine</label>
               <select
-                value={machineId}
-                onChange={(e) => setMachineId(e.target.value)}
+                value={form.machine}
+                onChange={(e) => setForm({...form, machine: e.target.value})}
                 style={inputStyle}
               >
                 <option value="">Select a machine...</option>
@@ -86,8 +96,8 @@ export default function Feedback({ goBack, goHome }) {
               <label style={labelStyle}>Subject</label>
               <input
                 type="text"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+                value={form.subject}
+                onChange={(e) => setForm({...form, subject: e.target.value})}
                 placeholder="Brief description..."
                 style={inputStyle}
               />
@@ -96,8 +106,8 @@ export default function Feedback({ goBack, goHome }) {
             <div>
               <label style={labelStyle}>Message</label>
               <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                value={form.message}
+                onChange={(e) => setForm({...form, message: e.target.value})}
                 placeholder="Describe the issue..."
                 rows={4}
                 style={{ ...inputStyle, resize: "none" }}
@@ -170,6 +180,16 @@ const subtitleStyle = {
 const successMessage = {
   background: "#ecfdf3",
   color: "#16a34a",
+  padding: "10px 14px",
+  borderRadius: 8,
+  marginBottom: 16,
+  fontSize: 13,
+  textAlign: "center",
+};
+
+const failMessage = {
+  background: "#efbcc6",
+  color: "#a81f1f",
   padding: "10px 14px",
   borderRadius: 8,
   marginBottom: 16,

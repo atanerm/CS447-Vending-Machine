@@ -11,6 +11,7 @@ const Login = ({ setUser }) =>{
     const navigate = useNavigate();
     const handleSubmit = async(e) =>{
         e.preventDefault();
+        setError("");
         try{
             const res = await axios.post("http://localhost:5000/api/auth/login", form);
             setUser(res.data.user);
@@ -25,6 +26,7 @@ const Login = ({ setUser }) =>{
         <div>
             <form onSubmit={handleSubmit}>
                 <h2>Login</h2>
+                {error && <p>{error}</p>}
                 <input 
                     type = "email" 
                     placeholder="Email" 

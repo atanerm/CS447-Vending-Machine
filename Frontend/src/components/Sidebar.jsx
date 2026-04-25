@@ -8,20 +8,29 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import StorageIcon from "@mui/icons-material/Storage";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import FeedbackIcon from "@mui/icons-material/Feedback";
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 // Each entry maps a page id to its label and icon component
 // activePage: id of the currently active page, used to highlight the right nav item
 // onNavigate: callback returened with the item id when the user clicks a nav button
-export default function Sidebar() {
+export default function Sidebar({setUser}) {
   const NAV_ITEMS = [
   { path: "/dashboard", label: "Dashboard", icon: DashboardIcon },
   { path: "/machines", label: "Machines", icon: StorageIcon },
   { path: "/products", label: "Products", icon: InventoryIcon },
   { path: "/feedback", label: "Feedback", icon: FeedbackIcon },
+  { path: "/logout", label: "Sign Out", icon: LogoutIcon}
   ];
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleLogout = async() =>{
+    const res = await axios.post("http://localhost:5000/api/auth/logout");
+    setUser(null);
+    navigate("/login");
+  };
  
   return (
     <aside
@@ -83,7 +92,8 @@ export default function Sidebar() {
           return (
             <button
               key={item.path}
-              onClick={() => navigate(item.path)}
+              onClick={item.path === "/logout"? handleLogout:() => navigate(item.path)}
+              className={item.path === "/logout" ? "button_bottom" : ""}
               style={{
                 width: "95%",
                 display: "flex",
@@ -132,3 +142,10 @@ export default function Sidebar() {
     </aside>
   );
 }
+const bottom_button = {
+  position: "fixed",
+  bottom: "20px",
+  left: "50%",
+  transform: "translateX(-50%)",
+  zIndex: 1000
+};

@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import pool from '../config/db.js';
 import dotenv from 'dotenv';
 import { protect_login } from '../middleware/auth.js';
+import { MACHINES } from '../../Frontend/src/data/genData.js';
 const router = express.Router();
 
 const cookieOptions = {
@@ -56,7 +57,7 @@ router.post("/register", async (req, res) =>{ //create  a new User
 
     const token = generateToken(newUser.rows[0].user_id);
 
-    res.cookie('token', token, cookieOpctions);
+    res.cookie('token', token, cookieOptions);
 
     return res.status(201).json({user: newUser.rows[0]}); //return user id, name and email
 }); 
@@ -107,6 +108,37 @@ router.post("/login", async(req, res) => {
         role_name: roleData.role_name
         }
     });
+});
+router.post("/machines", async(req, res) => {
+
+});
+
+router.post("/products", async(req, res) => {
+
+});
+
+router.post("/feedback", protect_login, async(req, res) => {
+    const {user, machine, subject, message} = req.body; //gets user_id, machine, subject and message
+    if (!machine || !subject || !message){
+        return res.status(400).json({message: "Please fill in all required fields"});
+    }
+    if (!req.user){
+        return res.status(401).json({message: "Login to send feedback"});
+    }
+    const machineExists = await pool.query("SELECT * FROM MACHINE WHERE machine_id = $1", [machine]); //checks if machine exists
+    if(machineExists.rows.length === 0){
+        return res.status(400).json({message: "Machine not found"}) 
+    }
+    const newFeedback = await pool.query( //writes to database
+        "INSERT INTO FEEDBACK (user_id, machine_id, subject, send_message) VALUES ($1, $2, $3, $4) RETURNING *", 
+        [user, machine, subject, message]);
+    const feedback = newFeedback.rows[0];
+    return res.status(201).json({feedback: {
+        user_id: newFeedback.user_id,
+        machine_id: newFeedback.machine_id,
+        subject: newFeedback.subject,
+        message: newFeedback.message
+    }}); 
 });
 
 router.get('/me', protect_login, async(req, res) => {

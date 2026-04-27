@@ -8,11 +8,13 @@ import StorageIcon from "@mui/icons-material/Storage";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import LogoutIcon from "@mui/icons-material/Logout";
+import ProfileImage from "./ProfileImage/ProfileImage";
+import "./ProfileImage/ProfileImage.css";
 
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
-export default function Sidebar({ setUser }) {
+export default function Sidebar({ setUser, user}) {
   const NAV_ITEMS = [
     { path: "/dashboard", label: "Dashboard", icon: DashboardIcon },
     { path: "/machines", label: "Machines", icon: StorageIcon },
@@ -23,8 +25,12 @@ export default function Sidebar({ setUser }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const firstName = user?.first_name || "None";
+  const lastName = user?.last_name || "None";
+  const email = user?.email || "None";
+
   const handleLogout = async () => {
-    await axios.post("http://localhost:5000/api/auth/logout");
+    await axios.post("/api/auth/logout");
     setUser(null);
     navigate("/login");
   };
@@ -111,31 +117,46 @@ export default function Sidebar({ setUser }) {
       </nav>
 
       {/* SIGN OUT*/}
-      <div style={{ padding: "10px" }}>
+      {user?<div style={{ padding: "10px" }}>
       <button
         onClick={handleLogout}
         style={{
           width: "95%",
           display: "flex",
           alignItems: "center",
-          gap: 10,
-          padding: "12px",
+          gap: 8,
+          padding: "10px",
           borderRadius: 8,
           border: "none",
           cursor: "pointer",
-          background: "#df1212", 
-          color: "white",
-          fontWeight: "600",
+          background: "#df121200", 
+          color: "#1e293b",
+          fontWeight: "400",
           textAlign: "left",
           transition: "0.2s",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = "#b91c1c")}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "#dc2626")}
+        onMouseEnter={(e) => (e.currentTarget.style.background = "#b91c1c00")}
+        onMouseLeave={(e) => (e.currentTarget.style.background = "#dc262600")}
       >
         <LogoutIcon style={{ fontSize: 18 }} />
         <span>Sign Out</span>
       </button>
-    </div>
+    </div>:null}
+    {user?<div style={{ 
+      marginTop: "auto", 
+      padding: "10px", 
+      borderTop: "1px solid #1e293b", 
+      paddingTop: "15px", 
+      marginBottom: "-15px" }}
+      >
+        <div className="profile-row">
+          <ProfileImage firstName={firstName} lastName={lastName} />
+          <div className="name-email">
+            <p className="name-style">{firstName} {lastName}</p>
+            <p className="email-style">{email}</p>
+          </div>
+        </div>
+    </div>:null}
     </aside>
   );
 }

@@ -4,9 +4,9 @@ import Dashboard from "./pages/Dashboard";
 import Machines from "./pages/MachinePage";
 import Products from "./pages/Products";
 import Feedback from "./pages/Feedback";
-import Register from "./pages/Register";
+import Register from "./pages/Register/Register";
 import NotFound from "./pages/PageNotFound";
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate} from "react-router-dom";
@@ -52,7 +52,7 @@ export default function App() {
   useEffect(()=>{
     const fetchUser = async () => {
       try{
-        const res = await axios.get("http://localhost:5000/api/auth/me");
+        const res = await axios.get("/api/auth/me");
         setUser(res.data.user);
       }
       catch(err){
@@ -72,7 +72,7 @@ export default function App() {
     <>
        {/* Main app layout: sidebar on the left, page content on the right */}
       <div style={{ display: "flex", height: "100vh", overflow: "hidden"}}>
-        {handleSidebar()? <Sidebar setUser={setUser}/>:null} {/* if login do not render sidebar */}
+        {handleSidebar()? <Sidebar setUser={setUser} user={user}/>:null} {/* if login, do not render sidebar */}
         <main
           style={{
             display: "flex",

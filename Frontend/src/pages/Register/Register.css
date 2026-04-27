@@ -1,0 +1,59 @@
+.global-register{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    margin: 0 auto;
+    height: 0px;
+}
+
+.register-card{
+    display: flex;
+    border-radius: 35px;
+    padding: 55px;
+    background-color: #ffb81c;
+}
+
+.full-name{
+    width: 100%;    
+    display: flex;
+    gap: 10px;
+}
+
+.register{
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+
+.fail-message {
+  background: #efbcc6;
+  color: #a81f1f;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  margin-top: 6px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.registerbtn{
+    border: 1px solid #ccc;
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    display: inline-block;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+.registerbtn:hover{
+    cursor: pointer;
+}
+.registerbtn.button{
+    background: #228B22;
+}

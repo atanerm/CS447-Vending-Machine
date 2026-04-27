@@ -21,7 +21,7 @@ export default function Feedback({ goBack, goHome, user }) {
     e.preventDefault();
     setSubmitted(false);
     try{
-      const res = await axios.post("http://localhost:5000/api/auth/feedback", form);
+      const res = await axios.post("/api/auth/feedback", form);
       // Temporary placeholder for future backend/database submission
       console.log(
         form.machine,

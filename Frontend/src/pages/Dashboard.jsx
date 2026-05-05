@@ -60,7 +60,6 @@ const pageLayout = {
   padding: "32px 36px",
   flex: 1,
   overflowY: "auto",
-  marginLeft: "230px",
 };
 
 const headerSection = {

@@ -68,7 +68,7 @@ export default function Products({ goBack, goHome }) {
   }, [productRows]);
 
   return (
-    <div style={{ padding: "32px 36px", flex: 1, overflowY: "auto", marginLeft: "230px"}}>
+    <div style={{ padding: "32px 36px", flex: 1, overflowY: "auto"}}>
 
       {/* Navigation buttons */}
       <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>

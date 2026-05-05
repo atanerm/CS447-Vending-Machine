@@ -3,8 +3,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import pool from '../config/db.js';
 import dotenv from 'dotenv';
-import { protect_login } from '../middleware/auth.js';
+import { authorize_staff, protect_login } from '../middleware/auth.js';
 import { MACHINES } from '../../Frontend/src/data/genData.js';
+
 const router = express.Router();
 
 const cookieOptions = {
@@ -115,6 +116,29 @@ router.post("/machines", async(req, res) => {
 
 router.post("/products", async(req, res) => {
 
+});
+
+//authorize_staff remember to add it back
+
+router.get("/view/feedback", async(req, res) => {
+    try{
+        const getFeedback = await pool.query(
+            `SELECT feedback.*, 
+             json_build_object(
+                'user_id', users.user_id,
+                'username', users.First_name || ' ' || users.Last_name,
+                'email', users.email 
+             ) AS user
+            FROM feedback
+            JOIN users ON feedback.user_id = users.user_id
+            ORDER BY feedback.created_at DESC;`
+        );
+        res.status(200).json(getFeedback.rows);
+    }
+    catch (err) {
+        console.error(err.message);
+        res.status(500).json("Server error");
+  }
 });
 
 router.post("/feedback", protect_login, async(req, res) => {

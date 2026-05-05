@@ -44,7 +44,7 @@ export default function Sidebar({ setUser, user}) {
         display: "flex",
         flexDirection: "column",
         paddingBottom: "20px",
-        position: "fixed",
+        position: "relative",
       }}
     >
       {/* Logo */}

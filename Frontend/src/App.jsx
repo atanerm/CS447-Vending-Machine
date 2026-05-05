@@ -8,6 +8,7 @@ import Register from "./pages/Register/Register";
 import NotFound from "./pages/PageNotFound";
 import Login from "./pages/Login/Login";
 import axios from "axios";
+import ViewFeedback from "./pages/View_Feedback/ViewFeedback"
 import { useLocation } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate} from "react-router-dom";
 
@@ -29,7 +30,7 @@ export default function App() {
   //gets current page
   const location = useLocation();
 
-  const show_sidebar_urls = ["/dashboard", "/machines", "/products", "/feedback"]
+  const show_sidebar_urls = ["/dashboard", "/machines", "/products", "/feedback", "/view/feedback"]
 
   function goHome(){
     navigate("/dashboard");
@@ -98,6 +99,7 @@ export default function App() {
           <Route path = "/feedback" element={<Feedback  goBack={goBack} goHome={goHome} user={user}/>} />
           <Route path = "/login" element={user? <Navigate to="/dashboard"/>:<Login setUser={setUser}/>}/>
           <Route path = "/register" element={user? <Navigate to="/dashboard"/>:<Register setUser={setUser}/>}/>
+          <Route path = "/view/feedback" element={<ViewFeedback goBack={goBack} goHome={goHome} />}></Route>
           <Route path = "*" element={<NotFound/>}/>
         </Routes>
       {/* Global reset and font import */}

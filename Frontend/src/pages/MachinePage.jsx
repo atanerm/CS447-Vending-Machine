@@ -38,6 +38,7 @@ export default function Machines({
   const [currentMachineId, setCurrentMachineId] = useState(
     selectedMachine ? selectedMachine.id : ""
   );
+  const [savedMachineProducts, setSavedMachineProducts] = useState({});
 
   // Sync dropdown when navigating from dashboard
   useEffect(() => {
@@ -48,8 +49,12 @@ export default function Machines({
 
   // Finds the selected machine object from data
   const currentMachine = useMemo(() => {
-    return MACHINES.find((m) => m.id === currentMachineId) || null;
-  }, [currentMachineId]);
+    const machine = MACHINES.find((m) => m.id === currentMachineId) || null;
+    if (!machine) return null;
+
+    const savedProducts = savedMachineProducts[currentMachineId];
+    return savedProducts ? { ...machine, products: savedProducts } : machine;
+  }, [currentMachineId, savedMachineProducts]);
 
   // Keeps parent state in sync
   useEffect(() => {
@@ -80,6 +85,17 @@ export default function Machines({
       good,
     };
   }, [currentMachine]);
+
+  const handleSaveProducts = (updatedProducts) => {
+    setSavedMachineProducts((current) => ({
+      ...current,
+      [currentMachineId]: updatedProducts.map((product) => ({ ...product })),
+    }));
+  };
+
+  const handleCancelEdit = () => {
+    // No additional page-level state is required for cancel.
+  };
 
   return (
     <div style={{ padding: "32px 36px", flex: 1, overflowY: "auto"}}>
@@ -148,7 +164,11 @@ export default function Machines({
           </div>
 
           {/* Product table */}
-          <ProductTable products={currentMachine.products} />
+          <ProductTable
+            products={currentMachine.products}
+            onSave={handleSaveProducts}
+            onCancel={handleCancelEdit}
+          />
         </>
       )}
     </div>

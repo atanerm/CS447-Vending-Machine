@@ -23,7 +23,7 @@ export default function ProductTable({ products }) {
       <table style={tableStyle}>
         <thead>
           <tr style={theadRow}>
-            {["Product", "Category", "Quantity", "Capacity", "Status"].map((heading) => (
+            {["Slot", "Product", "Quantity", "Capacity", "Status"].map((heading) => (
               <th key={heading} style={th}>
                 {heading}
               </th>
@@ -47,14 +47,14 @@ export default function ProductTable({ products }) {
                 onMouseEnter={(e) => (e.currentTarget.style.background = "#fafafa")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               >
+                {/* Slot */}
+                <td style={td}>
+                  <span style={mutedTextStyle}>{idx + 1}</span>
+                </td>
+
                 {/* Product name */}
                 <td style={td}>
                   <span style={productNameStyle}>{product.name}</span>
-                </td>
-
-                {/* Category */}
-                <td style={td}>
-                  <span style={mutedTextStyle}>{product.category}</span>
                 </td>
 
                 {/* Quantity */}

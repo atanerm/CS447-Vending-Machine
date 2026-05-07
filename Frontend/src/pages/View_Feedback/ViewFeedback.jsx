@@ -7,21 +7,29 @@ import "./ViewFeedback.css"
 const ViewFeedback = ({goBack, goHome}) => {
     const [feedback, setFeedback] = useState([]);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);
 
-    async function fetchFeedback(){
-        try{
+
+    useEffect(()=> {
+        const fetchFeedback = async () => {
+            try{
             const response = await axios.get("/api/auth/view/feedback");
             setFeedback(response.data);
             console.log(feedback);
-        }
-       catch(err){
-            setError(err.response?.data?.message);
-            console.error("Something went wrong:", error);
-        }
-    }
-    useEffect(() => {
+            }
+            catch(err){
+                setError(err.response?.data?.message);
+                console.error("Something went wrong:", error);
+            }
+            finally{
+                setLoading(false);
+            }
+        };
         fetchFeedback();
     }, []);
+
+    if (loading) return <div>Loading...</div>;
+
     return(
         <div style={pageLayout}>
             <div style={pageContent}>
@@ -54,7 +62,7 @@ const ViewFeedback = ({goBack, goHome}) => {
                                 <td>{query.user?.username}</td>
                                 <td>{query.user?.email}</td>
                                 <td>{query.created_at.slice(0,10)}</td>
-                                <td><button>View</button></td>
+                                <td><button style={viewBtn}>View</button></td>
                             </tr>
                             ))}
                         </tbody>
@@ -98,4 +106,16 @@ const navBtn = {
   fontSize: 12,
   fontWeight: 600,
   cursor: "pointer",
+};
+
+const viewBtn = {
+  padding: "6px 14px",
+  borderRadius: 7,
+  background: "#0f172a",
+  color: "#fff",
+  border: "none",
+  fontSize: 12,
+  fontWeight: 600,
+  cursor: "pointer",
+  transition: "background 0.15s",
 };

@@ -94,6 +94,7 @@ export default function App() {
               onSelectMachine={setSelectedMachine}
               goBack={goBack}
               goHome={goHome}
+              user={user}
             />}/>
           <Route path = "/products" element={<Products goBack={goBack} goHome={goHome} />}/>
           <Route path = "/feedback" element={<Feedback  goBack={goBack} goHome={goHome} user={user}/>} />

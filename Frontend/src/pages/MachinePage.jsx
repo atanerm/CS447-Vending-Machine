@@ -33,6 +33,7 @@ export default function Machines({
   onSelectMachine,
   goBack,
   goHome,
+  user,
 }) {
   // Tracks currently selected machine ID (from dropdown or navigation)
   const [currentMachineId, setCurrentMachineId] = useState(
@@ -168,6 +169,7 @@ export default function Machines({
             products={currentMachine.products}
             onSave={handleSaveProducts}
             onCancel={handleCancelEdit}
+            user={user}
           />
         </>
       )}

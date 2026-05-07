@@ -7,6 +7,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import StorageIcon from "@mui/icons-material/Storage";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import FeedbackIcon from "@mui/icons-material/Feedback";
+import EmailIcon from "@mui/icons-material/Email";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ProfileImage from "./ProfileImage/ProfileImage";
 import "./ProfileImage/ProfileImage.css";
@@ -19,20 +20,28 @@ export default function Sidebar({ setUser, user}) {
     { path: "/dashboard", label: "Dashboard", icon: DashboardIcon },
     { path: "/machines", label: "Machines", icon: StorageIcon },
     { path: "/products", label: "Products", icon: InventoryIcon },
-    { path: "/feedback", label: "Feedback", icon: FeedbackIcon },
+    { path: "/feedback", label: "Send Feedback", icon: FeedbackIcon },
   ];
 
   const navigate = useNavigate();
   const location = useLocation();
 
+  console.log(user);
+
   const firstName = user?.first_name || "None";
   const lastName = user?.last_name || "None";
   const email = user?.email || "None";
+
+  const feedbackActive = location.pathname === "/view/feedback";
 
   const handleLogout = async () => {
     await axios.post("/api/auth/logout");
     setUser(null);
     navigate("/login");
+  };
+
+  const handleViewFeedback= async () => {
+    navigate("/view/feedback");
   };
 
   return (
@@ -115,6 +124,31 @@ export default function Sidebar({ setUser, user}) {
           );
         })}
       </nav>
+      
+      {/* VIEW FEEDBACK */}
+      {user && user?.role_name.toLowerCase() != "student"?<div style={{ padding: "10px" , 
+      borderTop: "1px solid #1e293b", flex: 1}}>
+      <button
+        onClick={handleViewFeedback}
+        style={{
+          width: "95%",
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          padding: "10px",
+          borderRadius: 8,
+          border: "none",
+          cursor: "pointer",
+          background: feedbackActive ? "#1e293b" : "transparent",
+          color: feedbackActive ? "#fff" : "#1e293b",
+          fontWeight: feedbackActive ? 600 : 400,
+          textAlign: "left",
+        }}
+      >
+        <EmailIcon style={{ fontSize: 18 }} />
+        <span>View Feedback</span>
+      </button>
+    </div>:null}
 
       {/* SIGN OUT*/}
       {user?<div style={{ padding: "10px" }}>
@@ -142,6 +176,7 @@ export default function Sidebar({ setUser, user}) {
         <span>Sign Out</span>
       </button>
     </div>:null}
+
     {user?<div style={{ 
       marginTop: "auto", 
       padding: "10px", 

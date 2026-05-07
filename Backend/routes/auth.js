@@ -165,8 +165,8 @@ router.post("/feedback", protect_login, async(req, res) => {
     }}); 
 });
 
-router.get('/me', protect_login, async(req, res) => {
-    res.json({ user: req.user });
+router.get('/me', protect_login, async (req, res) => {
+  res.json({ user: req.user });
 });
 
 //logout

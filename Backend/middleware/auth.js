@@ -17,7 +17,22 @@ export const protect_login = async (req, res, next) => {
             return res.status(401).json({message: "Not authorized, user not found"});
         }
 
-        req.user = user.rows[0];
+        const my_user = user.rows[0]; 
+
+        const role = await pool.query(
+            "SELECT role_name FROM roles WHERE role_id = $1",
+            [my_user.role_id]
+        );
+         
+        const role_name = role.rows.length > 0 ? role.rows[0].role_name : "Student";
+        req.user = {
+            user_id: my_user.user_id,
+            first_name: my_user.first_name,
+            last_name: my_user.last_name,
+            email: my_user.email,
+            role_id: my_user.role_id,
+            role_name
+        };
         next();
     }
     catch(error){

@@ -8,7 +8,7 @@ const td = {
   verticalAlign: "middle",
 };
 
-export default function ProductTable({ products = [], onSave, onCancel }) {
+export default function ProductTable({ products = [], onSave, onCancel , user}) {
   const [draftProducts, setDraftProducts] = useState(
     products.map((product) => ({ ...product }))
   );
@@ -55,7 +55,7 @@ export default function ProductTable({ products = [], onSave, onCancel }) {
           <span style={countStyle}>{products.length} items</span>
         </div>
 
-        <div style={buttonRow}>
+        {user?.role_name.toLowerCase() !== "student"?(<div style={buttonRow}>
           {!isEditing ? (
             <button style={editBtn} onClick={() => setIsEditing(true)}>
               Edit inventory
@@ -70,7 +70,7 @@ export default function ProductTable({ products = [], onSave, onCancel }) {
               </button>
             </>
           )}
-        </div>
+        </div>):null}
       </div>
 
       {isEditing && (
@@ -282,17 +282,6 @@ const th = {
   borderBottom: "1px solid #f1f5f9",
 };
 
-const productNameStyle = {
-  fontWeight: 600,
-  color: "#111827",
-  fontSize: 14,
-};
-
-const mutedTextStyle = {
-  color: "#6b7280",
-  fontSize: 13,
-};
-
 const valueTextStyle = {
   color: "#111827",
   fontSize: 13,
@@ -305,55 +294,6 @@ const emptyRowStyle = {
   fontSize: 14,
 };
 
-const containerStyle = {
-  background: "#fff",
-  borderRadius: 12,
-  boxShadow: "0 1px 3px rgba(0,0,0,0.07)",
-  overflow: "hidden",
-};
-
-const headerStyle = {
-  padding: "16px 20px",
-  borderBottom: "1px solid #f1f5f9",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-};
-
-const titleStyle = {
-  margin: 0,
-  fontSize: 15,
-  fontWeight: 700,
-  color: "#111827",
-};
-
-const countStyle = {
-  fontSize: 12,
-  fontWeight: 600,
-  color: "#6b7280",
-};
-
-const tableStyle = {
-  width: "100%",
-  borderCollapse: "collapse",
-  tableLayout: "auto",
-};
-
-const theadRow = {
-  background: "#f8fafc",
-};
-
-const th = {
-  padding: "10px 18px",
-  textAlign: "left",
-  fontSize: 11,
-  fontWeight: 700,
-  color: "#9ca3af",
-  textTransform: "uppercase",
-  letterSpacing: "0.07em",
-  borderBottom: "1px solid #f1f5f9",
-};
-
 const productNameStyle = {
   fontWeight: 600,
   color: "#111827",
@@ -363,16 +303,4 @@ const productNameStyle = {
 const mutedTextStyle = {
   color: "#6b7280",
   fontSize: 13,
-};
-
-const valueTextStyle = {
-  color: "#111827",
-  fontSize: 13,
-};
-
-const emptyRowStyle = {
-  padding: "36px",
-  textAlign: "center",
-  color: "#9ca3af",
-  fontSize: 14,
 };

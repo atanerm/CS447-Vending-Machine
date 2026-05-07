@@ -126,8 +126,10 @@ export default function Sidebar({ setUser, user}) {
       </nav>
       
       {/* VIEW FEEDBACK */}
-      {user && user?.role_name.toLowerCase() != "student"?<div style={{ padding: "10px" , 
-      borderTop: "1px solid #1e293b", flex: 1}}>
+      {user && user?.role_name.toLowerCase() != "student"?<div style=
+      {{padding: "22px 10px" , 
+        borderTop: "1px solid #1e293b", 
+        flex: 1}}>
       <button
         onClick={handleViewFeedback}
         style={{

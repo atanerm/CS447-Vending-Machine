@@ -38,7 +38,6 @@ export default function Machines({
   const [currentMachineId, setCurrentMachineId] = useState(
     selectedMachine ? selectedMachine.id : ""
   );
-  const [savedMachineProducts, setSavedMachineProducts] = useState({});
 
   // Sync dropdown when navigating from dashboard
   useEffect(() => {
@@ -49,12 +48,8 @@ export default function Machines({
 
   // Finds the selected machine object from data
   const currentMachine = useMemo(() => {
-    const machine = MACHINES.find((m) => m.id === currentMachineId) || null;
-    if (!machine) return null;
-
-    const savedProducts = savedMachineProducts[currentMachineId];
-    return savedProducts ? { ...machine, products: savedProducts } : machine;
-  }, [currentMachineId, savedMachineProducts]);
+    return MACHINES.find((m) => m.id === currentMachineId) || null;
+  }, [currentMachineId]);
 
   // Keeps parent state in sync
   useEffect(() => {
@@ -87,10 +82,13 @@ export default function Machines({
   }, [currentMachine]);
 
   const handleSaveProducts = (updatedProducts) => {
-    setSavedMachineProducts((current) => ({
-      ...current,
-      [currentMachineId]: updatedProducts.map((product) => ({ ...product })),
-    }));
+    const index = MACHINES.findIndex((m) => m.id === currentMachineId);
+    if (index !== -1) {
+      MACHINES[index] = {
+        ...MACHINES[index],
+        products: updatedProducts.map((product) => ({ ...product })),
+      };
+    }
   };
 
   const handleCancelEdit = () => {

@@ -165,6 +165,7 @@ export default function Machines({
 
           {/* Product table */}
           <ProductTable
+            key={currentMachineId}
             products={currentMachine.products}
             onSave={handleSaveProducts}
             onCancel={handleCancelEdit}

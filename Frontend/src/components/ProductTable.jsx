@@ -21,10 +21,10 @@ export default function ProductTable({ products = [], onSave, onCancel , user}) 
     }
   }, [products]);
 
-  const updateQuantity = (name, delta) => {
+  const updateQuantity = (index, delta) => {
     setDraftProducts((current) =>
-      current.map((product) => {
-        if (product.name !== name) return product;
+      current.map((product, idx) => {
+        if (idx !== index) return product;
 
         const nextQuantity = Math.max(
           0,
@@ -98,7 +98,7 @@ export default function ProductTable({ products = [], onSave, onCancel , user}) 
 
             return (
               <tr
-                key={product.name}
+                key={`${product.name}-${idx}`}
                 style={{
                   borderBottom:
                     idx < draftProducts.length - 1
@@ -122,7 +122,7 @@ export default function ProductTable({ products = [], onSave, onCancel , user}) 
                     <div style={quantityControl}>
                       <button
                         style={circleBtn}
-                        onClick={() => updateQuantity(product.name, -1)}
+                        onClick={() => updateQuantity(idx, -1)}
                         disabled={product.quantity <= 0}
                       >
                         −
@@ -130,7 +130,7 @@ export default function ProductTable({ products = [], onSave, onCancel , user}) 
                       <span style={quantityValue}>{product.quantity}</span>
                       <button
                         style={circleBtn}
-                        onClick={() => updateQuantity(product.name, 1)}
+                        onClick={() => updateQuantity(idx, 1)}
                         disabled={product.quantity >= product.capacity}
                       >
                         +

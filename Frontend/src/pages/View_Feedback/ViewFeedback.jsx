@@ -9,6 +9,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { alignItems, display } from "@mui/system";
 
 const ViewFeedback = ({goBack, goHome}) => {
     const [feedback, setFeedback] = useState([]);
@@ -16,14 +17,13 @@ const ViewFeedback = ({goBack, goHome}) => {
     const [loading, setLoading] = useState(true);
     const [showCard, setShowCard] = useState(false);
     const [clickedQuery, setClickedQuery] = useState(null);
-
+    const navigate = useNavigate();
 
     useEffect(()=> {
         const fetchFeedback = async () => {
             try{
                 const response = await axios.get("/api/auth/view/feedback");
                 setFeedback(response.data);
-                console.log(feedback);
             }
             catch(err){
                 setError(err.response?.data?.message);
@@ -36,17 +36,31 @@ const ViewFeedback = ({goBack, goHome}) => {
         fetchFeedback();
     }, []);
 
+    const resolveFeedback = async () => {
+        try{
+            const response = await axios.put("/api/auth/view/feedback", {feedback_id: clickedQuery.feedback_id});
+        }
+        catch(err){
+            setError(err.response?.data?.message);
+            console.error("Something went wrong:", error);
+        }
+        handleCancelView();
+        navigate(0);
+
+    };
+
+
     if (loading) return <div>Loading...</div>;
 
     const handleViewClick = (query) => {
         setShowCard(true);
-        setClickedQuery(query)
+        setClickedQuery(query);
     };
 
     const handleCancelView = () =>{
         setShowCard(false);
+        setClickedQuery("");
     }
-    console.log(feedback);
     return(
         <div style={pageLayout}>
             <div style={pageContent}>
@@ -73,6 +87,8 @@ const ViewFeedback = ({goBack, goHome}) => {
                         </thead>
                         <tbody>
                             {showCard && (
+                            <tr>
+                            <td>
                             <div
                                 style={{
                                     position: "fixed",
@@ -83,20 +99,26 @@ const ViewFeedback = ({goBack, goHome}) => {
                                     display: "flex",
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    backgroundColor: "rgba(0,0,0,0.3)" 
+                                    backgroundColor: "rgba(0,0,0,0.3)", 
+                               
                                 }}
                                 >
-                                <Card style = {cardStyle} variant="outlined" sx={{ mt: 2 }}>
+                                <Card className = "cardStyle" style={{borderRadius:30}}variant="outlined" sx={{ mt: 2 }}>
                                     <CardContent>
-                                        <div>
+                                        <div className="inter-text">
                                             <h1>{clickedQuery.machine_id}</h1>
                                             <h2>{clickedQuery.subject}</h2>
                                             <p>{clickedQuery.send_message}</p>
                                             <div style={styleBtns}>
                                                 <button style = {cancelBtn} onClick={handleCancelView}>Cancel</button>
-                                                <button style = {resolveBtn}>Resolve</button>
+                                                <button style = {resolveBtn} onClick={resolveFeedback}>Resolve</button>
                                             </div>
-                                            <div style = {{display:'flex', gap: 10, marginBottom: 0}}>
+                                            <div style = {{
+                                                display:'flex', 
+                                                gap: 10, 
+                                                color: "gray", 
+                                                justifyContent: "center",
+                                                alignItems: "center"}}>
                                                 <p>{clickedQuery.user?.username}</p>
                                                 <p>{clickedQuery.user?.email}</p>
                                             </div>
@@ -105,8 +127,10 @@ const ViewFeedback = ({goBack, goHome}) => {
                                     
                                 </Card>
                             </div>
+                            </td>
+                            </tr>
                             )}
-                            {feedback?.map((query) => (
+                            {feedback?.map((query) => (query.status.toLowerCase() === 'open'?
                                 <tr key={query.feedback_id}>    
                                 <td>{query.machine_id}</td>
                                 <td>{query.subject.slice(0,30)}</td>
@@ -114,7 +138,7 @@ const ViewFeedback = ({goBack, goHome}) => {
                                 <td>{query.user?.email}</td>
                                 <td>{query.created_at.slice(0,10)}</td>
                                 <td><button style={viewBtn} onClick={() => handleViewClick(query)}>View</button></td>
-                            </tr>
+                            </tr>:null
                             ))}
                         </tbody>
                     </table>
@@ -173,7 +197,9 @@ const viewBtn = {
 const styleBtns = {
     display: 'flex',
     marginTop: 10,
-    gap: 5
+    gap: 5,
+    justifyContent: "center",
+    alignItems: "center" 
 }
 
 const cancelBtn = {
@@ -181,7 +207,7 @@ const cancelBtn = {
   color: "#fff",
   border: "none",
   borderRadius: 10,
-  padding: "10px 16px",
+  padding: "15px 30px",
   cursor: "pointer",
   fontWeight: 700,
 };
@@ -191,13 +217,7 @@ const resolveBtn = {
   color: "#fff",
   border: "none",
   borderRadius: 10,
-  padding: "10px 16px",
+  padding: "15px 30px",
   cursor: "pointer",
   fontWeight: 700,
 };
-
-const cardStyle = {
-    width: 500,
-    height: 500,
-    overflow: 'hidden'
-}

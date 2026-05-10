@@ -119,8 +119,7 @@ router.post("/products", async(req, res) => {
 });
 
 //authorize_staff remember to add it back
-
-router.get("/view/feedback", async(req, res) => {
+router.get("/view/feedback", protect_login, authorize_staff, async(req, res) => {
     try{
         const getFeedback = await pool.query(
             `SELECT feedback.*, 
@@ -141,6 +140,35 @@ router.get("/view/feedback", async(req, res) => {
   }
 });
 
+router.put("/view/feedback", protect_login, authorize_staff, async(req, res) => {
+    const {feedback_id} = req.body;
+    const resolved = 'resolved';
+    let newFeedback;
+    try{
+        const getFeedback = await pool.query(`SELECT * FROM FEEDBACK WHERE feedback_id = $1`, [feedback_id]);
+        if(getFeedback.rows.length === 0){
+            return res.status(400).json({message: "Feedback not found"});
+        }
+        const feedback = getFeedback.rows[0];
+        if(feedback.status.toLowerCase() === 'open'){
+            try{
+                await pool.query(`UPDATE FEEDBACK SET STATUS = $1 WHERE feedback_id = $2`, [resolved, feedback_id]);
+                newFeedback = await pool.query(`SELECT * FROM FEEDBACK WHERE feedback_id = $1`, [feedback_id]);
+            }
+            catch (err) {
+                console.error(err.message);
+                res.status(500).json("Server error");
+            }
+        }
+    }
+    catch (err) {
+        console.error(err.message);
+        res.status(500).json("Server error");
+    }
+    return res.status(201).json({feedback: {
+        status: newFeedback.rows[0].status
+    }});
+});
 router.post("/feedback", protect_login, async(req, res) => {
     const {user, machine, subject, message} = req.body; //gets user_id, machine, subject and message
     if (!machine || !subject || !message){

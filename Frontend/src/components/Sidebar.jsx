@@ -26,8 +26,6 @@ export default function Sidebar({ setUser, user}) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(user);
-
   const firstName = user?.first_name || "None";
   const lastName = user?.last_name || "None";
   const email = user?.email || "None";

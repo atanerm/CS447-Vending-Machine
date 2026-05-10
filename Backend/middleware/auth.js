@@ -44,13 +44,17 @@ export const protect_login = async (req, res, next) => {
 
 export const authorize_staff = async (req, res, next) => {
     try{
-        if(req.user){
-            role_name = req.user.role_name
-            if(role_name.lower() === "student"){
+        console.log(req.user);
+        if(!req.user) {
+            return res.status(401).json({ message: "User not authenticated" });
+        }
+        else if (req.user){
+            const role_name = req.user.role_name
+            if(role_name.toLowerCase() === "student"){
                 return res.status(403).json({message: "User not privileged. Access denied"});
             }
-            next();
         }
+        next();
     }
     catch(error){
         console.log(error);
@@ -60,13 +64,17 @@ export const authorize_staff = async (req, res, next) => {
 
 export const authorize_admin = async (req, res, next) => {
     try{
-        if(req.user){
-            role_name = req.user.role_name;
-            if(role_name.lower() != "admin"){
+        console.log(req.user);
+        if(!req.user) {
+            return res.status(401).json({ message: "User not authenticated" });
+        }
+        else if (req.user){
+            const role_name = req.user.role_name
+            if(role_name.toLowerCase() != "admin"){
                 return res.status(403).json({message: "User not privileged. Access denied"});
             }
-            next();
         }
+        next();
     }
     catch(error){
         console.log(error);

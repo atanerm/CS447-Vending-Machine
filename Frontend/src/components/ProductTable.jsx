@@ -55,7 +55,7 @@ export default function ProductTable({ products = [], onSave, onCancel , user}) 
           <span style={countStyle}>{products.length} items</span>
         </div>
 
-        {user?.role_name.toLowerCase() !== "student"?(<div style={buttonRow}>
+        {user?.role_name.toLowerCase() !== "student" && user?(<div style={buttonRow}>
           {!isEditing ? (
             <button style={editBtn} onClick={() => setIsEditing(true)}>
               Edit inventory

@@ -30,6 +30,7 @@ export default function Feedback({ goBack, goHome, user }) {
       );
 
       setForm({
+        user: user ? user.user_id:null,
         machine: "",
         subject: "",
         message: ""

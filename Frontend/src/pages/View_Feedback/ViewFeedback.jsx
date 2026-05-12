@@ -7,9 +7,11 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import SearchIcon from "@mui/icons-material/Search";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { alignItems, display } from "@mui/system";
+import { TextField, InputAdornment } from '@mui/material';
+import { alignItems, borderRadius, display } from "@mui/system";
 
 const ViewFeedback = ({goBack, goHome}) => {
     const [feedback, setFeedback] = useState([]);
@@ -18,6 +20,7 @@ const ViewFeedback = ({goBack, goHome}) => {
     const [showCard, setShowCard] = useState(false);
     const [clickedQuery, setClickedQuery] = useState(null);
     const [refreshKey, setRefreshKey] = useState(0);
+    const [searchedVal, setSearchedVal] = useState("");
 
     useEffect(()=> {
         const fetchFeedback = async () => {
@@ -73,6 +76,27 @@ const ViewFeedback = ({goBack, goHome}) => {
                     </button>
                 </div>
                 <div>
+                    <TextField placeholder = "Search" onChange={(e) => setSearchedVal(e.target.value)} style={textFieldStyle}
+                          sx={{ '& .MuiOutlinedInput-root': { 
+                            '&.Mui-focused fieldset': {
+                                boxShadow: '0px 1px 10px rgba(130, 125, 125, 0.3)',
+                                borderColor: 'inherit',
+                                borderWidth: "1px",
+                            },
+                            borderRadius: '100px', 
+                            height: "40px",
+                            width: "400px",
+                            maxWidth: "400px",
+                            backgroundColor: "white",
+                            borderBottom: "10px"}, 
+                            }}
+                            InputProps={{
+                            startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                            ),
+                        }}/>
                     <table className="table">
                         <thead>
                             <tr>
@@ -129,7 +153,15 @@ const ViewFeedback = ({goBack, goHome}) => {
                             </td>
                             </tr>
                             )}
-                            {feedback?.map((query) => (query.status.toLowerCase() === 'open'?
+                            {feedback.filter((row) => {
+                                const searchText = searchedVal.trim().toLowerCase();
+                                const rowText = JSON.stringify(row).toLowerCase();
+
+                                return (
+                                    row.status?.toLowerCase() === 'open' &&
+                                    (!searchText || rowText.includes(searchText))
+                                    );
+                                }).map((query) => (query.status.toLowerCase() === 'open'?
                                 <tr key={query.feedback_id}>    
                                 <td>{query.machine_id}</td>
                                 <td>{query.subject.slice(0,30)}</td>
@@ -220,3 +252,8 @@ const resolveBtn = {
   cursor: "pointer",
   fontWeight: 700,
 };
+
+const textFieldStyle = {
+    borderRadius: 100,
+    paddingBottom: "10px"
+}

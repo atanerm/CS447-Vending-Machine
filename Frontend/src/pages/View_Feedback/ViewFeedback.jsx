@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation} from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import "./ViewFeedback.css"
@@ -17,7 +17,7 @@ const ViewFeedback = ({goBack, goHome}) => {
     const [loading, setLoading] = useState(true);
     const [showCard, setShowCard] = useState(false);
     const [clickedQuery, setClickedQuery] = useState(null);
-    const navigate = useNavigate();
+    const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect(()=> {
         const fetchFeedback = async () => {
@@ -34,7 +34,7 @@ const ViewFeedback = ({goBack, goHome}) => {
             }
         };
         fetchFeedback();
-    }, []);
+    }, [refreshKey]);
 
     const resolveFeedback = async () => {
         try{
@@ -45,8 +45,7 @@ const ViewFeedback = ({goBack, goHome}) => {
             console.error("Something went wrong:", error);
         }
         handleCancelView();
-        navigate(0);
-
+        setRefreshKey(oldKey => oldKey +1)
     };
 
 
